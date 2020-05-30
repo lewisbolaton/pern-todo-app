@@ -14,11 +14,7 @@ app.use(express.json()); //req.body
 app.post("/todos", async (req, res) => {
   try {
     const { description } = req.body;
-    const newTodo = await pool.query(
-      "INSERT INTO todo (description) VALUES($1) RETURNING *",
-      [description]
-    );
-
+    const newTodo = await pool.query('CALL add_todo($1)', [description]);
     res.json(newTodo.rows[0]);
   } catch (err) {
     console.error(err.message);
@@ -29,8 +25,8 @@ app.post("/todos", async (req, res) => {
 
 app.get("/todos", async (req, res) => {
   try {
-    const allTodos = await pool.query("SELECT * FROM todo");
-    res.json(allTodos.rows);
+    const allTodos = await pool.query("SELECT get_all_todo()");
+    res.json(allTodos.rows.map(todo => { return todo['get_all_todo'] }));
   } catch (err) {
     console.error(err.message);
   }
@@ -41,11 +37,8 @@ app.get("/todos", async (req, res) => {
 app.get("/todos/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const todo = await pool.query("SELECT * FROM todo WHERE todo_id = $1", [
-      id
-    ]);
-
-    res.json(todo.rows[0]);
+    const todo = await pool.query("SELECT get_todo($1)", [id]);
+    res.json(todo.rows[0].get_todo);
   } catch (err) {
     console.error(err.message);
   }
@@ -57,11 +50,7 @@ app.put("/todos/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const { description } = req.body;
-    const updateTodo = await pool.query(
-      "UPDATE todo SET description = $1 WHERE todo_id = $2",
-      [description, id]
-    );
-
+    const updateTodo = await pool.query('CALL edit_todo($1, $2)', [id, description]);
     res.json("Todo was updated!");
   } catch (err) {
     console.error(err.message);
@@ -73,9 +62,7 @@ app.put("/todos/:id", async (req, res) => {
 app.delete("/todos/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const deleteTodo = await pool.query("DELETE FROM todo WHERE todo_id = $1", [
-      id
-    ]);
+    const deleteTodo = await pool.query("CALL delete_todo($1)", [id]);
     res.json("Todo was deleted!");
   } catch (err) {
     console.log(err.message);
