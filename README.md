@@ -1,5 +1,7 @@
 # pern-todo-app
 
-<img src="https://www.freecodecamp.org/news/content/images/size/w2000/2020/03/PERN.png" />
+A basic todo web app based on the tutorial from: https://www.youtube.com/watch?v=ldYcgPKEZC8
 
-https://www.youtube.com/watch?v=ldYcgPKEZC8
+The following features are/will be added from the fork:
+- [x] Separate configuration file for the database
+- [x] Separate stored procedures for data access layer
