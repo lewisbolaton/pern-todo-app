@@ -4,4 +4,7 @@ A basic todo web app based on the tutorial from: https://www.youtube.com/watch?v
 
 The following features are/will be added from the fork:
 - [x] Separate configuration file for the database
-- [x] Separate stored procedures for data access layer
+- [x] Create stored procedures for data access layer
+- [ ] Separate routes for business logic layer
+- [ ] Create database models layer
+- [ ] Create docker file
