@@ -1,19 +1,21 @@
-import React, { Fragment } from "react";
+import React, { useState } from "react";
 import "./App.css";
 
 //components
-
 import InputTodo from "./components/InputTodo";
 import ListTodos from "./components/ListTodos";
 
-function App() {
+const App = () => {
+  const [listModified, setListModified] = useState(false);
+
+  //handlers
+  const handleListModify = () => setListModified(~listModified);
+
   return (
-    <Fragment>
-      <div className="container">
-        <InputTodo />
-        <ListTodos />
-      </div>
-    </Fragment>
+    <div className="container">
+      <InputTodo handleListModify={handleListModify} />
+      <ListTodos listModified={listModified} handleListModify={handleListModify} />
+    </div>
   );
 }
 

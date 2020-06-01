@@ -1,12 +1,13 @@
 import React, { Fragment, useEffect, useState } from "react";
 
 import EditTodo from "./EditTodo";
+import TodoItem from "./TodoItem";
 
-const ListTodos = () => {
+const ListTodos = (props) => {
   const [todos, setTodos] = useState([]);
+  const [selectedTodo, setSelectedTodo] = useState({});
 
   //delete todo function
-
   const deleteTodo = async id => {
     try {
       const deleteTodo = await fetch(`http://localhost:5000/todos/${id}`, {
@@ -23,23 +24,34 @@ const ListTodos = () => {
     try {
       const response = await fetch("http://localhost:5000/todos");
       const jsonData = await response.json();
-
       setTodos(jsonData);
     } catch (err) {
       console.error(err.message);
     }
   };
 
-  useEffect(() => {
-    getTodos();
-  }, []);
+  //handlers
+  const handleItemClick = (button, id) => {
+    if (button === "edit") {
 
-  console.log(todos);
+    } else if (button === "delete") {
+
+    }
+  }
+  const handleEditorClick = (button, id) => {
+    if (button === "edit") {
+
+    } else if (button === "close") {
+
+    }
+    setSelectedTodo({});
+  }
+
+  useEffect(() => { getTodos() }, [props.listModified]);
 
   return (
     <Fragment>
-      {" "}
-      <table class="table mt-5 text-center">
+      <table className="table mt-5 text-center">
         <thead>
           <tr>
             <th>Description</th>
@@ -48,29 +60,12 @@ const ListTodos = () => {
           </tr>
         </thead>
         <tbody>
-          {/*<tr>
-            <td>John</td>
-            <td>Doe</td>
-            <td>john@example.com</td>
-          </tr> */}
           {todos.map(todo => (
-            <tr key={todo.todo_id}>
-              <td>{todo.description}</td>
-              <td>
-                <EditTodo todo={todo} />
-              </td>
-              <td>
-                <button
-                  className="btn btn-danger"
-                  onClick={() => deleteTodo(todo.todo_id)}
-                >
-                  Delete
-                </button>
-              </td>
-            </tr>
+            <TodoItem key={todo.todo_id} todo={todo} handleClick={handleItemClick} listModified={props.listModified} handleListModify={props.handleListModify} />
           ))}
         </tbody>
       </table>
+      <EditTodo todo={selectedTodo} handleClick={handleEditorClick} handleListModify={props.handleListModify} />
     </Fragment>
   );
 };
