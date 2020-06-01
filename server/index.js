@@ -25,8 +25,8 @@ app.post("/todos", async (req, res) => {
 
 app.get("/todos", async (req, res) => {
   try {
-    const allTodos = await pool.query("SELECT get_all_todo()");
-    res.json(allTodos.rows.map(todo => { return todo['get_all_todo'] }));
+    const allTodos = await pool.query("SELECT * FROM get_all_todo()");
+    res.json(allTodos.rows);
   } catch (err) {
     console.error(err.message);
   }
@@ -37,8 +37,8 @@ app.get("/todos", async (req, res) => {
 app.get("/todos/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const todo = await pool.query("SELECT get_todo($1)", [id]);
-    res.json(todo.rows[0].get_todo);
+    const todo = await pool.query("SELECT * FROM get_todo($1)", [id]);
+    res.json(todo.rows[0]);
   } catch (err) {
     console.error(err.message);
   }
