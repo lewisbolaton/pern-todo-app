@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 const EditTodo = (props) => {
-  const [description, setDescription] = useState(props.todo.description);
+  const [description, setDescription] = useState("");
 
   //edit description function
 
@@ -23,13 +23,28 @@ const EditTodo = (props) => {
       console.error(err.message);
     }
   };
+  const getTodo = async () => {
+    try {
+      const response = await fetch(`http://localhost:5000/todos/${props.todo_id}`);
+      const jsonData = await response.json();
+      setDescription(jsonData.description);
+    } catch (err) {
+      console.error(err.message);
+    }
+  }
 
   //handlers
-  const handleTextChange = e => setDescription(e.target.value);
-  const handleEditClick = () => props.handleClick("edit", {description});
-  const handleCloseClick = () => props.handleClick("close");
+  const handleChange = e => setDescription(e.target.value);
+  const handleEditClick = () => props.hadleClick("edit");
+  const handleCloseClick = () => props.handleClick("delete");
 
-  useEffect(() => setDescription(props.todo.description), [props.selectedTodo]);
+  useEffect(() => {
+    if (typeof props.todo_id === "number") {
+      getTodo();
+    } else {
+      setDescription("");
+    }
+  }, [props.todo_id]);
 
   return (
     <div className="modal" id="editDialog">
@@ -43,7 +58,7 @@ const EditTodo = (props) => {
           </div>
 
           <div className="modal-body">
-            <input type="text" className="form-control" value={description} onChange={handleTextChange} />
+            <input type="text" className="form-control" value={description} onChange={handleChange} />
           </div>
 
           <div className="modal-footer">

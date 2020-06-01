@@ -5,7 +5,7 @@ import TodoItem from "./TodoItem";
 
 const ListTodos = (props) => {
   const [todos, setTodos] = useState([]);
-  const [selectedTodo, setSelectedTodo] = useState({});
+  const [selectedTodoId, setSelectedTodoId] = useState();
 
   //delete todo function
   const deleteTodo = async id => {
@@ -33,24 +33,23 @@ const ListTodos = (props) => {
   //handlers
   const handleItemClick = (button, id) => {
     if (button === "edit") {
-
+      setSelectedTodoId(id);
     } else if (button === "delete") {
-
     }
   }
   const handleEditorClick = (button, id) => {
     if (button === "edit") {
 
     } else if (button === "close") {
-
     }
-    setSelectedTodo({});
+    setSelectedTodoId();
   }
 
   useEffect(() => { getTodos() }, [props.listModified]);
 
   return (
     <Fragment>
+      <EditTodo todo_id={selectedTodoId} handleClick={handleEditorClick} handleListModify={props.handleListModify} />
       <table className="table mt-5 text-center">
         <thead>
           <tr>
@@ -65,7 +64,6 @@ const ListTodos = (props) => {
           ))}
         </tbody>
       </table>
-      <EditTodo todo={selectedTodo} handleClick={handleEditorClick} handleListModify={props.handleListModify} />
     </Fragment>
   );
 };

@@ -15,12 +15,12 @@ const TodoItem = (props) => {
         <p>{props.todo.description}</p>
       </td>
       <td>
-        <button type="button" className="btn btn-warning" data-toggle="modal" data-target='editDialog' onClick={handleEditClick}>
+        <button type="button" className="btn btn-warning" data-toggle="modal" data-target="#editDialog" onClick={handleEditClick}>
           Edit
         </button>
       </td>
       <td>
-        <button className="btn btn-danger" onclick={handleDeleteClick}>Delete</button>
+        <button className="btn btn-danger" onClick={handleDeleteClick}>Delete</button>
       </td>
     </tr>
   );
