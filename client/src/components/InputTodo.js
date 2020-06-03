@@ -1,8 +1,10 @@
 import React, { Fragment, useState } from "react";
 
-const InputTodo = () => {
+const InputTodo = (props) => {
   const [description, setDescription] = useState("");
 
+  //handlers
+  const handleChange = e => setDescription(e.target.value);
   const onSubmitForm = async e => {
     e.preventDefault();
     try {
@@ -13,7 +15,8 @@ const InputTodo = () => {
         body: JSON.stringify(body)
       });
 
-      window.location = "/";
+      props.handleListModify();
+      setDescription("");
     } catch (err) {
       console.error(err.message);
     }
@@ -21,14 +24,9 @@ const InputTodo = () => {
 
   return (
     <Fragment>
-      <h1 className="text-center mt-5">Pern Todo List</h1>
+      <h1 className="text-center mt-5">PERN Todo List</h1>
       <form className="d-flex mt-5" onSubmit={onSubmitForm}>
-        <input
-          type="text"
-          className="form-control"
-          value={description}
-          onChange={e => setDescription(e.target.value)}
-        />
+        <input type="text" className="form-control" value={description} onChange={handleChange} />
         <button className="btn btn-success">Add</button>
       </form>
     </Fragment>
