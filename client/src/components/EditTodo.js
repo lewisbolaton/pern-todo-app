@@ -4,26 +4,24 @@ const EditTodo = (props) => {
   const [description, setDescription] = useState("");
 
   //edit description function
-
   const updateDescription = async e => {
     e.preventDefault();
+    console.log("updateDescription() called");
     try {
       const body = { description };
       const response = await fetch(
-        `http://localhost:5000/todos/${props.todo.todo_id}`,
+        `http://localhost:5000/todos/${props.todo_id}`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(body)
         }
       );
-
-      window.location = "/";
     } catch (err) {
       console.error(err.message);
     }
   };
-  const getTodo = async () => {
+  const getTodo = async (e) => {
     try {
       const response = await fetch(`http://localhost:5000/todos/${props.todo_id}`);
       const jsonData = await response.json();
@@ -35,7 +33,15 @@ const EditTodo = (props) => {
 
   //handlers
   const handleChange = e => setDescription(e.target.value);
-  const handleEditClick = () => props.hadleClick("edit");
+  const handleEditClick = async e => {
+    try {
+      await updateDescription(e);
+      props.handleListModify();
+      setDescription("");
+    } catch (err) {
+      console.error(err.message);
+    }
+  };
   const handleCloseClick = () => props.handleClick("delete");
 
   useEffect(() => {
