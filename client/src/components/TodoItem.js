@@ -3,9 +3,27 @@ import React, { useState, useEffect } from "react";
 const TodoItem = (props) => {
   const [description, setDescription] = useState(props.todo.description);
 
+  //delete function
+  const deleteTodo = async id => {
+    try {
+      const deleteTodo = await fetch(`http://localhost:5000/todos/${props.todo.todo_id}`,
+        { method: "DELETE" });
+      console.log(deleteTodo);
+    } catch (err) {
+      console.error(err.message);
+    }
+  };
+
   //handlers
   const handleEditClick = () => props.handleClick("edit", props.todo.todo_id);
-  const handleDeleteClick = () => props.handleClick("delete", props.todo.todo_id)
+  const handleDeleteClick = async () => {
+    try {
+      await deleteTodo();
+      props.handleListModify();
+    } catch(err) {
+      console.log(err.message);
+    }
+  };
 
   useEffect(() => setDescription(props.todo.description), [props.listModified]);
 
